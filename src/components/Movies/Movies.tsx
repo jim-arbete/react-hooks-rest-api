@@ -1,50 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import './Movies.css';
+import React, { useState, useEffect } from 'react'
+import SearchInput, { SearchButton, SearchIconSVG }from '../Search/Search'
 import Table, { TableHead, TableRow, TableBody, TableCell } from '../Table/Table'
 
-const API = 'http://hn.algolia.com/api/v1/search?query=redux';
+// const API = 'http://hn.algolia.com/api/v1/search?query=redux';
+const API = 'http://www.omdbapi.com/?apikey=1925addd&type=movie'
 
-type Hit = {objectID: string; title: string; author: string;}
+type SearchDataDTO = {imdbID: string; Title: string; Year: string;}
 
 const Movies = () => {
 
-  const [data, setData] = useState<Hit[]>([]);
+  const [data, setData] = useState<SearchDataDTO[]>([])
+  const [search, setSearch] = useState<string>('')
   
   useEffect(() => {
 
+    // ADD DEBOUNCE => https://dev.to/gabe_ragland/debouncing-with-react-hooks-jci
     (async () => {
-      const result = await fetch(API);
-      const data = await result.json();
-      setData(data.hits);
+      try {
+        if (search.length > 2) {
+          const result = await fetch(`${API}&s=${search}`);
+          const data = await result.json();
+          setData(data.Search.slice(0,10));
+        } else {
+          console.error('to few chars');
+        }
+      } catch(error) {
+        console.error(error);
+      }
     })();
 
-  }, []);
+  }, [search]);
   
+  // return <pre>{ JSON.stringify(data, null, 2) }</pre>
 
   return (
     <>
-            <h2>Listing movies</h2>    
+      <div className="flex search-wrapper">
+        <SearchInput onSearchChange={setSearch} placeholder="Search titles on IMDB" />
+        <SearchButton>
+          <SearchIconSVG />
+        </SearchButton>
+      </div>
 
+      <h2>Listing movies<small>{data.length && `: found ${data.length} matches`}</small> </h2>
       <Table>
         <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell align="justify">Title</TableCell>
-              <TableCell align="right">Author</TableCell>
+              <TableCell>Title</TableCell>
+              <TableCell align="right">Year</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
           {data.map(row => (
-            <TableRow key={row.objectID}>
-              <TableCell>{row.objectID}</TableCell>
-              <TableCell align="justify">{row.title}</TableCell>
-              <TableCell align="right">{row.author}</TableCell>
-            </TableRow>
+            <a key={row.imdbID} href={`http://www.imdb.com/title/${row.imdbID}`} target="_blank">
+              <TableRow>
+                <TableCell>{row.imdbID}</TableCell>
+                <TableCell>{row.Title}</TableCell>
+                <TableCell align="right">{row.Year}</TableCell>
+              </TableRow>
+            </a>
           ))}
         </TableBody>
       </Table>
-
-      {/* <pre>{ JSON.stringify(data, null, 2) }</pre> */}
     </>
   );
 }

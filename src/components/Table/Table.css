@@ -18,31 +18,37 @@
     display: grid;
     font-size: 0.75rem;
     line-height: 2;
-
     background: var(--row-bg-odd);
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     transition: 0.5s;
 }
-    .thead:first-of-type .grid-cell {
-      background: var(--table-header);
-      color: rgba(0, 0, 0, 0.54);
-      line-height: 2.5;
-      font-weight: 500;
-    }
-    .grid-table.row:nth-child(odd) .grid-cell {
-      background: var(--row-bg-odd);
-    }
-    .grid-table:hover {
-      background: var(--table-hover);
-      transition: 500ms;
-    }
+
+.thead:first-of-type .grid-cell {
+  background: var(--table-header);
+  color: rgba(0, 0, 0, 0.54);
+  line-height: 2.8;
+  font-weight: 500;
+}
+
+.grid-table.row:nth-child(odd) .grid-cell {
+  background: var(--row-bg-odd);
+}
+
+.grid-table:hover {
+  background: var(--table-hover);
+  transition: 500ms;
+}
 
 .grid-cell {
     display: block;
     width: 100%;
     text-align: center;
-    padding: 0.5em 0.5em;
+    padding: 0.5em 1.5em;
     border-bottom: 1px solid var(--table-border);
+}
+
+.tbody .grid-cell{
+  color: rgba(0, 0, 0, 0.87);
 }
 
 @media all and (max-width: 430px) {
