@@ -5,6 +5,8 @@ export type StandardProps = {
   children?: any
   value?: string
   size?: string
+  onClick?: any
+  onChange?: any
 }
 
 export type IconSVG = {
@@ -23,42 +25,18 @@ SearchIconSVG.defaultProps = {
   size: '26px'
 }
 
-export const SearchButton = ({children, value}: StandardProps) => (
-    <button className="search-button" value={value} type="button" aria-label="Search">
+export const SearchButton = ({children, value, onClick}: StandardProps) => (
+    <button onClick={onClick} className="search-button" value={value} type="button" aria-label="Search">
       {children}
     </button>
 )
 
-export const SearchInput = ({onSearchChange, size, placeholder, value}: SearchProps) => {
-  const [search, setSearch] = useState('')
-
-  useEffect(() => {
-    onSearchChange(search)
-  }, [search]);
-
-  return (
-    <input onChange={e => setSearch(e.target.value)} value={value} className="search-input" style={{ height: size }} placeholder={placeholder} type="text" />
-  )
-}
+export const SearchInput = ({onChange, size, placeholder, value}: SearchProps) =>
+    <input onChange={onChange} value={value} className="search-input" style={{ height: size }} placeholder={placeholder} type="text" />
   
 SearchInput.defaultProps = {
   placeholder: '',
   size: '40px'
 }
-
-// export const TableCell = () => {
-//   return (
-//     <>
-//     </>
-//   )
-// }
-
-// return (
-//   <pre>{ JSON.stringify(tableDataRows, null, 2) }</pre>
-// )
-
-// 1. HEADER => {tableHeaderRows.map(item => item.id)}
-// 2. DATA => {Object.keys(row).filter(key => tableHeaderRows.map(item => item.id).includes(key))}
-// 3. TEST => {Object.keys(row).filter(key => tableHeaderRows.map(item => item.id).includes(key)).map((label: string) => (
 
 export default SearchInput;
