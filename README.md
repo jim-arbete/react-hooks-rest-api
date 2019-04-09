@@ -4,6 +4,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+## Installation
+
+```bash
+$ git clone https://github.com/jim-arbete/react-hooks-rest-api.git react-hooks-rest-api
+$ cd react-hooks-rest-api
+$ npm install
+```
+
 ### `npm start`
 
 Runs the app in the development mode.<br>
@@ -26,6 +34,18 @@ The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Build => Production server
+
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+1. Try out the build with npm serve. 
+2. Install serve `npm i serve -g`
+3. And run:
+```bash
+$ cd dist/react-hooks-rest-api
+$ serve -l 5000
+```
 
 ### `npm run eject`
 
