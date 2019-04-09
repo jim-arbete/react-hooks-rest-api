@@ -13,8 +13,6 @@ export type IconSVG = {
 } & StandardProps
 
 export type SearchProps = {
-  onSearchChange?: any
-  autoComplete?: string
   placeholder?: string
 } & StandardProps
 

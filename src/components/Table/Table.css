@@ -47,8 +47,12 @@
     border-bottom: 1px solid var(--table-border);
 }
 
+.thead .sortable{
+  cursor: pointer;
+}
+
 .tbody .grid-cell{
-  color: rgba(0, 0, 0, 0.87);
+  color: #000000de;
 }
 
 @media all and (max-width: 430px) {

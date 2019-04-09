@@ -61,7 +61,7 @@ header, footer, article, nav, aside {
 header, footer {
   color: white;
   background-color: #282c34;
-  height: 10vh;
+  height: 12vh;
   font-size: calc(8px + 2vmin);
 }
 
@@ -83,12 +83,11 @@ header a {
   font-weight: 700;
 }
 
-#main {
-  background-color: #fafafa;
-}
-
 #main article {
-  margin-top: 10px;  
+  background-color:#fafafa;
+  min-height: 400px;
+  margin-top: 10px;
+  border-radius: 4px;
   flex: 1;
   order: 1;
 }

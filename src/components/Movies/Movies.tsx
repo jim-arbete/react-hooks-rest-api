@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import SearchInput, { SearchButton, SearchIconSVG }from '../Search/Search'
 import Table, { TableHead, TableRow, TableBody, TableCell } from '../Table/Table'
 
-// const API = 'http://hn.algolia.com/api/v1/search?query=redux';
 const API = 'http://www.omdbapi.com/?apikey=1925addd&type=movie'
 
 type SearchDataDTO = {imdbID: string; Title: string; Year: string;}
@@ -11,12 +10,13 @@ const Movies = () => {
 
   const [data, setData] = useState<SearchDataDTO[]>([])
   const [query, setQuery] = useState('')
-  const [search, setSearch] = useState<string>('')
+  const [search, setSearch] = useState('')
+  const [sortID, setSortID] = useState('') // 'ID' | 'Title' | 'Year'
+  const [sortDirection, setSortDirection] = useState('') // 'asc' | 'desc'
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   
   useEffect(() => {
-
     (async () => {
       try {
         if (search.length > 2) {
@@ -44,7 +44,6 @@ const Movies = () => {
           setData([]);
         }
       } catch(error) {
-        console.error('D blev fel: ',error);
         setData([]);
         setIsLoading(false)
         setIsError(true)
@@ -55,6 +54,44 @@ const Movies = () => {
   const handleSubmit = (event:any) => {
     setQuery(search)
     event.preventDefault()
+  }
+
+  const handleSortClick = (sort: string, id: string) => {
+    let direction
+    if (sortDirection === 'asc' && id === sortID) {
+      direction = 'desc'
+    } else if (sortDirection === 'desc') {
+      direction = 'asc'
+    } else {
+      direction = (sortDirection === '') ? 'asc' : 'asc'
+    }
+    setSortDirection(direction)
+    setSortID(id)
+  }
+
+  const handleSortDirection = (id: string) => (id === sortID) ? sortDirection : ''
+
+  const sortFunction = (key: string, order: string = 'asc') => {
+    return function(a: any, b: any) {
+
+      if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        return 0;
+      }
+
+      const compareA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key]
+      const compareB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key]
+      
+      let comparison = 0
+
+      if (compareA > compareB) {
+        comparison = 1
+      } else if (compareA < compareB) {
+        comparison = -1
+      }
+      return (
+        (order == 'desc') ? (comparison * -1) : comparison
+      )
+    }
   }
   
   return (
@@ -77,16 +114,14 @@ const Movies = () => {
           <Table>
             <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Title</TableCell>
-                  <TableCell align="right">Year</TableCell>
+                  <TableCell className="sortable" onSortClick={handleSortClick} sortKey="Title" sortDirection={handleSortDirection('Title')}>Title</TableCell>
+                  <TableCell className="sortable" onSortClick={handleSortClick} sortKey="Year" sortDirection={handleSortDirection('Year')} align="right">Year</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-              {data.map(row => (
+              {data.sort(sortFunction(sortID, sortDirection)).map(row => (
                 <a key={row.imdbID} href={`http://www.imdb.com/title/${row.imdbID}`} target="_blank">
                   <TableRow>
-                    <TableCell>{row.imdbID}</TableCell>
                     <TableCell>{row.Title}</TableCell>
                     <TableCell align="right">{row.Year}</TableCell>
                   </TableRow>
